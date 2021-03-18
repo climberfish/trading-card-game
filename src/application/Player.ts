@@ -1,11 +1,14 @@
 import { Card, Deck } from '@/application/Deck/Deck';
-import { DeckBuilder, DefaultDeckBuilder } from '@/application/Deck/DeckBuilder';
+import {
+  DeckBuilder,
+  DefaultDeckBuilder,
+} from '@/application/Deck/DeckBuilder';
 import Mana from '@/application/Mana';
 
 export default class Player {
   private _mana: Mana = new Mana();
 
-  private _health = 30;
+  private _health = 0;
 
   private _deck: Deck;
 
@@ -15,13 +18,25 @@ export default class Player {
     this._deck = deckBuilder.build();
   }
 
-  get currentMana(): number { return this._mana.current; }
+  get currentMana(): number {
+    return this._mana.current;
+  }
 
-  get health(): number { return this._health; }
+  set health(health: number) {
+    this._health = health;
+  }
 
-  get deck(): Deck { return this._deck; }
+  get health(): number {
+    return this._health;
+  }
 
-  get hand(): Card[] { return this._hand; }
+  get deck(): Deck {
+    return this._deck;
+  }
+
+  get hand(): Card[] {
+    return this._hand;
+  }
 
   draw(cards: number): void {
     for (let time = 0; time < cards; time++) {
@@ -35,9 +50,13 @@ export default class Player {
     this._deck = shuffleStrategy.run(this.deck);
   }
 
-  increaseMana(): void { this._mana.increaseMax(); }
+  increaseMana(): void {
+    this._mana.increaseMax();
+  }
 
-  refillMana(): void { this._mana.refill(); }
+  refillMana(): void {
+    this._mana.refill();
+  }
 
   selectNextCard(index: number): Card {
     const [card] = this._hand.splice(index, 1);

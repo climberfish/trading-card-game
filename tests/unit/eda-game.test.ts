@@ -1,7 +1,9 @@
 import Game from '@/application/Game';
+import GameBuilder from '@/application/Game/GameBuilder';
+import SetInitStates from '@/application/Phases/Init/SetInitStates';
 import Player from '@/application/Player';
 
-describe.skip('Game', () => {
+describe('Game', () => {
   let player1: Player;
   let player2: Player;
 
@@ -10,7 +12,14 @@ describe.skip('Game', () => {
     player2 = new Player();
   });
 
-  test('Players start with 30 Health and 0 Mana slots', () => {
+  test.only('Players start with 30 Health and 0 Mana slots', () => {
+    const game = new GameBuilder()
+      .withPlayers(player1, player2)
+      .withInitPipeline([SetInitStates.with({ health: 30 })])
+      .build();
+
+    game.start();
+
     expect(player1.health).toBe(30);
     expect(player1.currentMana).toBe(0);
   });

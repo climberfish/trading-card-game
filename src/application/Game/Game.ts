@@ -1,4 +1,5 @@
 import Player from '@/application/Player';
+import Phase from '../Phases/Phase';
 
 export default class Game {
   private _player1: Player;
@@ -7,19 +8,34 @@ export default class Game {
 
   private _currentPlayer: Player;
 
+  private initPipeline: Phase[] = [];
+
   constructor(player1: Player, player2: Player) {
     this._player1 = player1;
     this._player2 = player2;
     this._currentPlayer = this._player1;
   }
 
-  get currentPlayer() { return this._currentPlayer; }
+  get currentPlayer() {
+    return this._currentPlayer;
+  }
+
+  get players(): Player[] {
+    return [this._player1, this._player2];
+  }
+
+  setInitPipeline(pipeline: Phase[]) {
+    this.initPipeline = pipeline;
+  }
 
   start(): void {
-    this._player1.shuffleDeck();
-    this._player1.draw(3);
-    this._player2.shuffleDeck();
-    this._player2.draw(3);
+    // this._player1.shuffleDeck();
+    // this._player1.draw(3);
+    // this._player2.shuffleDeck();
+    // this._player2.draw(3);
+    this.initPipeline.forEach((phase) => {
+      phase.perform();
+    });
   }
 
   beginTurn(): void {
