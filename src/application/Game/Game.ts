@@ -54,9 +54,13 @@ export default class Game {
     this.activePhase = (this.activePhase + 1) % totalPhases;
   }
 
-  // otherPlayer() {
-  //   return this.currentPlayer === this._player1 ? this._player2 : this._player1;
-  // }
+  switchPlayer(): void {
+    this._currentPlayer = this.otherPlayer();
+  }
+
+  private otherPlayer() {
+    return this.currentPlayer === this._player1 ? this._player2 : this._player1;
+  }
 
   /*
   run() {
