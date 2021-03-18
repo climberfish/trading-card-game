@@ -1,0 +1,70 @@
+import Game from '@/application/Game';
+import Player from '@/application/Player';
+
+describe('Game', () => {
+  let player1: Player;
+  let player2: Player;
+
+  beforeEach(() => {
+    player1 = new Player();
+    player2 = new Player();
+  });
+
+  test('Players start with 30 Health and 0 Mana slots', () => {
+    expect(player1.health).toBe(30);
+    expect(player1.currentMana).toBe(0);
+  });
+
+  test('Players start with a deck of 20 cards', () => {
+    const { deck } = player1;
+    expect(deck.length).toBe(20);
+  });
+
+  test('Players draw 3 cards on game start', () => {
+    const game = new Game(player1, player2);
+    game.start();
+    const { hand: hand1, deck: deck1 } = player1;
+    const { hand: hand2, deck: deck2 } = player2;
+    expect(hand1.length).toBe(3);
+    expect(hand2.length).toBe(3);
+    expect(deck1.length).toBe(17);
+    expect(deck2.length).toBe(17);
+  });
+
+  test('Decrease mana after play', () => {
+    const game = new Game(player1, player2);
+    game.start();
+    const { currentPlayer } = game;
+    expect(currentPlayer.currentMana).toBe(0);
+    game.beginTurn();
+    expect(currentPlayer).toBe(player1);
+    expect(currentPlayer.currentMana).toBe(1);
+    player1.selectNextCard(2);
+    expect(currentPlayer.currentMana).toBe(0);
+  });
+
+  test('Change player after turn', () => {
+    const game = new Game(player1, player2);
+    const { currentPlayer } = game;
+    expect(currentPlayer).toBe(player1);
+    game.start();
+    expect(currentPlayer).toBe(player1);
+    game.endTurn();
+    expect(currentPlayer).toStrictEqual(player2);
+  });
+
+  // test('', () => {
+  //   const game = new Game(player1, player2);
+  //   game.start();
+  //   const { currentPlayer } = game;
+  //   expect(currentPlayer.currentMana).toBe(0);
+  //   game.beginTurn();
+  //   expect(currentPlayer).toBe(player1);
+  //   expect(currentPlayer.currentMana).toBe(1);
+  //   // const card = player1.selectNextCard(2);
+  //   player1.nextCardStrategy = function*()
+  //   game.playCards();
+  //   game.endTurn();
+  //   expect(currentPlayer.health).toBe(30 - card);
+  // });
+});
