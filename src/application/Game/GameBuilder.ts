@@ -3,7 +3,9 @@ import PhaseBuilder from '../Phases/PhaseBuilder';
 import Player from '../Player';
 
 export default class GameBuilder {
-  private initBuilder: PhaseBuilder[] = [];
+  private initBuilders: PhaseBuilder[] = [];
+
+  private runBuilders: PhaseBuilder[] = [];
 
   private players: [Player, Player] | undefined = undefined;
 
@@ -13,7 +15,12 @@ export default class GameBuilder {
   }
 
   withInitPipeline(phaseBuilders: PhaseBuilder[]): GameBuilder {
-    this.initBuilder = phaseBuilders;
+    this.initBuilders = phaseBuilders;
+    return this;
+  }
+
+  withRunLoop(phaseBuilders: PhaseBuilder[]): GameBuilder {
+    this.runBuilders = phaseBuilders;
     return this;
   }
 
@@ -22,7 +29,10 @@ export default class GameBuilder {
 
     const game = new Game(...this.players);
     game.setInitPipeline(
-      this.initBuilder.map((phaseBuilder) => phaseBuilder.build(game)),
+      this.initBuilders.map((phaseBuilder) => phaseBuilder.build(game)),
+    );
+    game.setRunLoop(
+      this.runBuilders.map((phaseBuilder) => phaseBuilder.build(game)),
     );
     return game;
   }

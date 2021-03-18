@@ -10,6 +10,12 @@ export default class Game {
 
   private initPipeline: Phase[] = [];
 
+  private runLoop: Phase[] = [];
+
+  private activePhase = 0;
+
+  private isRunning = false;
+
   constructor(player1: Player, player2: Player) {
     this._player1 = player1;
     this._player2 = player2;
@@ -28,28 +34,29 @@ export default class Game {
     this.initPipeline = pipeline;
   }
 
+  setRunLoop(pipeline: Phase[]) {
+    this.runLoop = pipeline;
+  }
+
   start(): void {
-    // this._player1.shuffleDeck();
-    // this._player1.draw(3);
-    // this._player2.shuffleDeck();
-    // this._player2.draw(3);
     this.initPipeline.forEach((phase) => {
       phase.perform();
     });
+    this.isRunning = true;
   }
 
-  beginTurn(): void {
-    this.currentPlayer.increaseMana();
-    this.currentPlayer.refillMana();
+  nextPhase(): void {
+    if (!this.isRunning) return;
+
+    this.runLoop[this.activePhase].perform();
+
+    const totalPhases = this.runLoop.length;
+    this.activePhase = (this.activePhase + 1) % totalPhases;
   }
 
-  endTurn(): void {
-    this._currentPlayer = this.otherPlayer();
-  }
-
-  otherPlayer() {
-    return this.currentPlayer === this._player1 ? this._player2 : this._player1;
-  }
+  // otherPlayer() {
+  //   return this.currentPlayer === this._player1 ? this._player2 : this._player1;
+  // }
 
   /*
   run() {

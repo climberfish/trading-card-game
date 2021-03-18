@@ -56,7 +56,7 @@ export default class Player {
   }
 
   increaseMana(): void {
-    this._mana.increaseMax();
+    this._mana.increase();
   }
 
   refillMana(): void {

@@ -3,11 +3,16 @@ export default class Mana {
 
   private _current = 0;
 
-  get max() { return this._max; }
+  get max() {
+    return this._max;
+  }
 
-  get current() { return this._current; }
+  get current() {
+    return this._current;
+  }
 
-  increaseMax(): void {
+  increase(): void {
+    this._current++;
     this._max++;
   }
 
@@ -16,7 +21,7 @@ export default class Mana {
   }
 
   consume(value: number): boolean {
-    const canConsume = (this._current >= value);
+    const canConsume = this._current >= value;
     if (canConsume) this._current -= value;
     return canConsume;
   }
