@@ -12,6 +12,7 @@ module.exports = {
     ecmaVersion: 2020,
   },
   rules: {
+    semi: 'off',
     'max-classes-per-file': 'off',
     'class-methods-use-this': 'off',
     'no-continue': 'off',
