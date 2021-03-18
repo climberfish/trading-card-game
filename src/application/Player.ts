@@ -38,11 +38,16 @@ export default class Player {
     return this._hand;
   }
 
-  draw(cards: number): void {
-    for (let time = 0; time < cards; time++) {
-      const card = this._deck.shift();
-      if (card !== undefined) this._hand.push(card);
-    }
+  // draw(cards: number): void {
+  //   for (let time = 0; time < cards; time++) {
+  //     const card = this._deck.shift();
+  //     if (card !== undefined) this._hand.push(card);
+  //   }
+  // }
+
+  draw(): void {
+    const card = this._deck.shift();
+    if (card !== undefined) this._hand.push(card);
   }
 
   shuffleDeck(): void {
