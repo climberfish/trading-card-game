@@ -1,7 +1,7 @@
-import DrawCard from '@/application/Actions/DrawCard';
+import DrawCardAction from '@/application/Actions/DrawCardAction';
 import Game from '@/application/Game';
 
-export default class DrawInitialCards {
+export default class DrawInitialCardsPhase {
   private cards: number;
 
   private game: Game;
@@ -14,14 +14,14 @@ export default class DrawInitialCards {
   static with(cards: number) {
     return {
       build(game: Game) {
-        return new DrawInitialCards(game, cards);
+        return new DrawInitialCardsPhase(game, cards);
       },
     };
   }
 
   perform(): void {
     this.game.players.forEach((player) => {
-      new DrawCard(player).performTimes(3);
+      new DrawCardAction(player).performTimes(3);
     });
   }
 }

@@ -1,6 +1,6 @@
 import Game from '../Game';
 
-export default class SwitchPlayer {
+export default class IncreaseManaPhase {
   private game: Game;
 
   constructor(game: Game) {
@@ -10,12 +10,12 @@ export default class SwitchPlayer {
   static builder() {
     return {
       build(game: Game) {
-        return new SwitchPlayer(game);
+        return new IncreaseManaPhase(game);
       },
     };
   }
 
   perform(): void {
-    this.game.switchPlayer();
+    this.game.players.forEach((player) => player.increaseMana());
   }
 }

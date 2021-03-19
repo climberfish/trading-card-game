@@ -1,7 +1,7 @@
-import SetHealth from '@/application/Actions/SetHealth';
+import SetHealthAction from '@/application/Actions/SetHealthAction';
 import Game from '@/application/Game';
 
-export default class SetInitStates {
+export default class SetInitStatesPhase {
   private health: number;
 
   private mana: number;
@@ -17,14 +17,14 @@ export default class SetInitStates {
   static with({ health = 30, mana = 0 }) {
     return {
       build(game: Game) {
-        return new SetInitStates(game, health, mana);
+        return new SetInitStatesPhase(game, health, mana);
       },
     };
   }
 
   perform(): void {
     this.game.players.forEach((player) => {
-      new SetHealth(player, this.health).perform();
+      new SetHealthAction(player, this.health).perform();
       // new Actions.SetMana(player, this.mana);
     });
   }

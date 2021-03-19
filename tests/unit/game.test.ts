@@ -1,10 +1,10 @@
-import CastCard from '@/application/Actions/CastCard';
+import CastCardAction from '@/application/Actions/CastCardAction';
 import Game from '@/application/Game';
 import GameBuilder from '@/application/Game/GameBuilder';
-import IncreaseMana from '@/application/Phases/IncreaseMana';
-import DrawInitialCards from '@/application/Phases/Init/DrawInitialCards';
-import SetInitStates from '@/application/Phases/Init/SetInitStates';
-import SwitchPlayer from '@/application/Phases/SwitchPlayer';
+import IncreaseManaPhase from '@/application/Phases/IncreaseManaPhase';
+import DrawInitialCardsPhase from '@/application/Phases/Init/DrawInitialCardsPhase';
+import SetInitStatesPhase from '@/application/Phases/Init/SetInitStatesPhase';
+import SwitchPlayerPhase from '@/application/Phases/SwitchPlayerPhase';
 import Player from '@/application/Player';
 
 describe('Game', () => {
@@ -18,14 +18,14 @@ describe('Game', () => {
     game = new GameBuilder()
       .withPlayers(player1, player2)
       .withInitPipeline([
-        SetInitStates.with({ health: 30 }),
-        DrawInitialCards.with(3),
+        SetInitStatesPhase.with({ health: 30 }),
+        DrawInitialCardsPhase.with(3),
       ])
       .withRunLoop([
         // RestoreMana.builder(),
-        IncreaseMana.builder(),
+        IncreaseManaPhase.builder(),
         // CastCards.builder(),
-        SwitchPlayer.builder(),
+        SwitchPlayerPhase.builder(),
         // CastCards.builder(),
         // AttackPhase.builder(),
       ])
@@ -80,7 +80,7 @@ describe('Game', () => {
   test('Decrease mana after play', () => {
     game.start();
     game.nextPhase();
-    new CastCard(player1, 2).perform();
+    new CastCardAction(player1, 2).perform();
 
     expect(game.currentPlayer.currentMana).toBe(0);
   });
