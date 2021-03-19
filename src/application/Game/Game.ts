@@ -1,6 +1,12 @@
 import Player from '@/application/Player';
 import Phase from '../Phases/Phase';
 
+enum GameStatus {
+  CREATED,
+  RUNNING,
+  FINISHED,
+}
+
 export default class Game {
   private _player1: Player;
 
@@ -14,12 +20,13 @@ export default class Game {
 
   private activePhase = 0;
 
-  private isRunning = false;
+  private status: GameStatus;
 
   constructor(player1: Player, player2: Player) {
     this._player1 = player1;
     this._player2 = player2;
     this._currentPlayer = this._player1;
+    this.status = GameStatus.CREATED;
   }
 
   get currentPlayer() {
@@ -39,14 +46,16 @@ export default class Game {
   }
 
   start(): void {
+    if (this.status !== GameStatus.CREATED) return;
+
     this.initPipeline.forEach((phase) => {
       phase.perform();
     });
-    this.isRunning = true;
+    this.status = GameStatus.RUNNING;
   }
 
   nextPhase(): void {
-    if (!this.isRunning) return;
+    if (this.status !== GameStatus.RUNNING) return;
 
     this.runLoop[this.activePhase].perform();
 
