@@ -7,6 +7,7 @@ enum GameStatus {
   FINISHED,
 }
 
+type EventListener = (event: string) => void;
 export default class Game {
   private _player1: Player;
 
@@ -21,6 +22,8 @@ export default class Game {
   private activePhase = 0;
 
   private status: GameStatus;
+
+  private listeners: EventListener[] = [];
 
   constructor(player1: Player, player2: Player) {
     this._player1 = player1;
@@ -65,6 +68,14 @@ export default class Game {
 
   switchPlayer(): void {
     this._currentPlayer = this.otherPlayer();
+  }
+
+  onEvent(listener: EventListener) {
+    this.listeners.push(listener);
+  }
+
+  $emit(event: string) {
+    this.listeners.forEach((listener) => listener(event));
   }
 
   private otherPlayer() {

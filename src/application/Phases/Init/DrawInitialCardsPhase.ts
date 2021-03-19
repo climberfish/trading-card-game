@@ -21,7 +21,7 @@ export default class DrawInitialCardsPhase {
 
   run(): void {
     this.game.players.forEach((player) => {
-      new DrawCardAction(player).runMultipleTimes(3);
+      new DrawCardAction(player).runMultipleTimes(this.game, 3);
     });
   }
 }

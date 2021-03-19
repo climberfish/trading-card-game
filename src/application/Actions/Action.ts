@@ -1,17 +1,27 @@
+import Game from '../Game';
+
 interface Event {
   emit: () => void;
 }
 
 export default abstract class Action {
-  abstract perform(): void;
+  // private events: Event[];
 
-  run(): void {
+  // constructor(events: Event[]) {
+  //   this.events = events;
+  // }
+
+  protected abstract perform(): void;
+
+  run(game: Game): void {
+    // this.events.forEach((event) => event.emit());
+    game.$emit(this.constructor.name);
     this.perform();
   }
 
-  runMultipleTimes(times: number): void {
+  runMultipleTimes(game: Game, times: number): void {
     for (let i = 0; i < times; i++) {
-      this.run();
+      this.run(game);
     }
   }
 }
