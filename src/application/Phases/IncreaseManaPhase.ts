@@ -15,7 +15,7 @@ export default class IncreaseManaPhase {
     };
   }
 
-  perform(): void {
+  run(): void {
     this.game.players.forEach((player) => player.increaseMana());
   }
 }

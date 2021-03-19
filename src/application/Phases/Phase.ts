@@ -1,3 +1,3 @@
 export default interface Phase {
-  perform: { (): void };
+  run: { (): void };
 }

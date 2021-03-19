@@ -80,7 +80,7 @@ describe('Game', () => {
   test('Decrease mana after play', () => {
     game.start();
     game.nextPhase();
-    new CastCardAction(player1, 2).perform();
+    new CastCardAction(player1, 2).run();
 
     expect(game.currentPlayer.currentMana).toBe(0);
   });
@@ -92,5 +92,9 @@ describe('Game', () => {
     game.nextPhase();
 
     expect(game.currentPlayer).toBe(player2);
+  });
+
+  test('Print events', () => {
+    game.start();
   });
 });

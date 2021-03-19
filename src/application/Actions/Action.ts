@@ -1,11 +1,17 @@
-export default abstract class Action {
-  // constructor(event_type)
+interface Event {
+  emit: () => void;
+}
 
+export default abstract class Action {
   abstract perform(): void;
 
-  performTimes(times: number): void {
+  run(): void {
+    this.perform();
+  }
+
+  runMultipleTimes(times: number): void {
     for (let i = 0; i < times; i++) {
-      this.perform();
+      this.run();
     }
   }
 }

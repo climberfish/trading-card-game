@@ -49,7 +49,7 @@ export default class Game {
     if (this.status !== GameStatus.CREATED) return;
 
     this.initPipeline.forEach((phase) => {
-      phase.perform();
+      phase.run();
     });
     this.status = GameStatus.RUNNING;
   }
@@ -57,7 +57,7 @@ export default class Game {
   nextPhase(): void {
     if (this.status !== GameStatus.RUNNING) return;
 
-    this.runLoop[this.activePhase].perform();
+    this.runLoop[this.activePhase].run();
 
     const totalPhases = this.runLoop.length;
     this.activePhase = (this.activePhase + 1) % totalPhases;

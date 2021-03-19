@@ -22,9 +22,9 @@ export default class SetInitStatesPhase {
     };
   }
 
-  perform(): void {
+  run(): void {
     this.game.players.forEach((player) => {
-      new SetHealthAction(player, this.health).perform();
+      new SetHealthAction(player, this.health).run();
       // new Actions.SetMana(player, this.mana);
     });
   }

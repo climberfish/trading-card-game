@@ -15,7 +15,7 @@ export default class SwitchPlayerPhase {
     };
   }
 
-  perform(): void {
+  run(): void {
     this.game.switchPlayer();
   }
 }
