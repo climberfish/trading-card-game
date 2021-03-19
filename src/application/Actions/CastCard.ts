@@ -2,7 +2,7 @@ import { Card } from '../Deck/Deck';
 import Player from '../Player';
 import Action from './Action';
 
-export default class PlayCard extends Action {
+export default class CastCard extends Action {
   private player: Player;
 
   private card: Card;

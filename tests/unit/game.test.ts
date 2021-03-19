@@ -1,4 +1,4 @@
-import PlayCard from '@/application/Actions/PlayCard';
+import CastCard from '@/application/Actions/CastCard';
 import Game from '@/application/Game';
 import GameBuilder from '@/application/Game/GameBuilder';
 import IncreaseMana from '@/application/Phases/IncreaseMana';
@@ -22,12 +22,12 @@ describe('Game', () => {
         DrawInitialCards.with(3),
       ])
       .withRunLoop([
-        //    RestoreMana.builder(),
+        // RestoreMana.builder(),
         IncreaseMana.builder(),
-        // PlayCards.builder(),
+        // CastCards.builder(),
         SwitchPlayer.builder(),
-        //   PlayCards.builder(),
-        //   AttackPhase.builder(),
+        // CastCards.builder(),
+        // AttackPhase.builder(),
       ])
       .build();
   });
@@ -80,15 +80,15 @@ describe('Game', () => {
   test('Decrease mana after play', () => {
     game.start();
     game.nextPhase();
-    new PlayCard(player1, 2).perform();
+    new CastCard(player1, 2).perform();
 
     expect(game.currentPlayer.currentMana).toBe(0);
   });
 
-  test('Change player after turn', () => {
+  test('Change player after first card phase', () => {
     game.start();
     game.nextPhase();
-    // Skip card play
+    // Skip card casting
     game.nextPhase();
 
     expect(game.currentPlayer).toBe(player2);
