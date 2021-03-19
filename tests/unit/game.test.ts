@@ -94,7 +94,7 @@ describe('Game', () => {
     expect(game.currentPlayer).toBe(player2);
   });
 
-  test.only('Print events', () => {
+  test('Print events', () => {
     game.onEvent((event) => {
       console.log(event);
     });

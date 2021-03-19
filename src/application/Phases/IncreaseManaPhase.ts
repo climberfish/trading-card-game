@@ -1,9 +1,11 @@
 import Game from '../Game';
+import Phase from './Phase';
 
-export default class IncreaseManaPhase {
+export default class IncreaseManaPhase extends Phase {
   private game: Game;
 
   constructor(game: Game) {
+    super();
     this.game = game;
   }
 

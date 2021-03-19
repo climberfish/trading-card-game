@@ -1,9 +1,11 @@
 import Game from '../Game';
+import Phase from './Phase';
 
-export default class SwitchPlayerPhase {
+export default class SwitchPlayerPhase extends Phase {
   private game: Game;
 
   constructor(game: Game) {
+    super();
     this.game = game;
   }
 

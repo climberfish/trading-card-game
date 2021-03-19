@@ -1,11 +1,11 @@
 import Player from '@/application/Player';
 import Phase from '../Phases/Phase';
 
-enum GameStatus {
-  CREATED,
-  RUNNING,
-  FINISHED,
-}
+// enum GameStatus {
+//   CREATED,
+//   RUNNING,
+//   FINISHED,
+// }
 
 type EventListener = (event: string) => void;
 export default class Game {
@@ -19,9 +19,9 @@ export default class Game {
 
   private runLoop: Phase[] = [];
 
-  private activePhase = 0;
+  private activePhase?: Phase;
 
-  private status: GameStatus;
+  // private status: GameStatus;
 
   private listeners: EventListener[] = [];
 
@@ -29,7 +29,7 @@ export default class Game {
     this._player1 = player1;
     this._player2 = player2;
     this._currentPlayer = this._player1;
-    this.status = GameStatus.CREATED;
+    // this.status = GameStatus.CREATED;
   }
 
   get currentPlayer() {
@@ -49,21 +49,21 @@ export default class Game {
   }
 
   start(): void {
-    if (this.status !== GameStatus.CREATED) return;
+    // if (this.status !== GameStatus.CREATED) return;
 
     this.initPipeline.forEach((phase) => {
       phase.run();
     });
-    this.status = GameStatus.RUNNING;
+    // this.status = GameStatus.RUNNING;
+    [this.activePhase] = this.runLoop;
   }
 
   nextPhase(): void {
-    if (this.status !== GameStatus.RUNNING) return;
+    // if (this.status !== GameStatus.RUNNING) return;
+    if (!this.activePhase) return;
 
-    this.runLoop[this.activePhase].run();
-
-    const totalPhases = this.runLoop.length;
-    this.activePhase = (this.activePhase + 1) % totalPhases;
+    this.activePhase.run();
+    this.activePhase = this.activePhase.next();
   }
 
   switchPlayer(): void {

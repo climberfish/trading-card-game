@@ -1,7 +1,8 @@
 import SetHealthAction from '@/application/Actions/SetHealthAction';
 import Game from '@/application/Game';
+import Phase from '../Phase';
 
-export default class SetInitStatesPhase {
+export default class SetInitStatesPhase extends Phase {
   private health: number;
 
   private mana: number;
@@ -9,6 +10,7 @@ export default class SetInitStatesPhase {
   private game: Game;
 
   constructor(game: Game, health: number, mana: number) {
+    super();
     this.health = health;
     this.mana = mana;
     this.game = game;
