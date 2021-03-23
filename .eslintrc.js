@@ -12,6 +12,8 @@ module.exports = {
     ecmaVersion: 2020,
   },
   rules: {
+    'no-useless-constructor': 'off',
+    '@typescript-eslint/no-useless-constructor': ['error'],
     'max-classes-per-file': 'off',
     'class-methods-use-this': 'off',
     'no-continue': 'off',

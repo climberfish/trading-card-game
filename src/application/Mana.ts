@@ -7,7 +7,7 @@ export default class Mana {
 
   get current() { return this._current; }
 
-  increaseMax(): void {
+  increase(): void {
     this._max++;
   }
 
