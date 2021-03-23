@@ -3,9 +3,10 @@ import GameBuilder from '@/application/GameBuilder';
 import DrawCardsPhase from '@/application/Phases/DrawCardsPhase';
 import SetInitStatsPhase from '@/application/Phases/SetInitStatsPhase';
 import ShufflePhase from '@/application/Phases/ShufflePhase';
-import IncreaseMaxManaPhase from '@/application/Phases/IncreaseMaxManaPhase';
+import SwitchPlayerPhase from '@/application/Phases/SwitchPlayerPhase';
+import RefillAndIncrementManaPhase from '@/application/Phases/RefillAndIncrementManaPhase';
 import Player from '@/application/Player';
-import RefillManaPhase from '@/application/Phases/RefillManaPhase';
+import CastCardAction from '@/application/Actions/CastCardAction';
 
 describe('Game', () => {
   let player1: Player;
@@ -15,7 +16,6 @@ describe('Game', () => {
   beforeEach(() => {
     player1 = new Player();
     player2 = new Player();
-    // game = new Game(player1, player2);
     game = new GameBuilder()
       .withPlayers(player1, player2)
       // .withConfigs({ maxMana: 10 })
@@ -24,10 +24,7 @@ describe('Game', () => {
         ShufflePhase.noShuffle(),
         DrawCardsPhase.withCards(3),
       ])
-      .withLoop([
-        new IncreaseMaxManaPhase(),
-        new RefillManaPhase(),
-      ])
+      .withLoop([new RefillAndIncrementManaPhase(), new SwitchPlayerPhase()])
       .build();
   });
 
@@ -54,63 +51,45 @@ describe('Game', () => {
     expect(deck2.length).toBe(17);
   });
 
-  test('Increase mana at start of turn', () => {
+  test('Increase and fill mana at start of turn', () => {
     game.start();
 
     expect(player1.maxMana).toBe(0);
     expect(player2.maxMana).toBe(0);
+    expect(player1.currentMana).toBe(0);
+    expect(player2.currentMana).toBe(0);
 
     game.nextPhase();
 
     expect(player1.maxMana).toBe(1);
     expect(player2.maxMana).toBe(1);
-  });
-
-  test('Fill mana at start of turn', () => {
-    game.start();
-
-    expect(player1.currentMana).toBe(0);
-    expect(player2.currentMana).toBe(0);
-
-    game.nextPhase();
-    game.nextPhase();
-
     expect(player1.currentMana).toBe(1);
     expect(player2.currentMana).toBe(1);
   });
 
-  // test('Decrease mana after play', () => {
-  //   game.start();
-  //   const { currentPlayer } = game;
-  //   expect(currentPlayer.currentMana).toBe(0);
-  //   game.beginTurn();
-  //   expect(currentPlayer).toBe(player1);
-  //   expect(currentPlayer.currentMana).toBe(1);
-  //   player1.selectNextCard(2);
-  //   expect(currentPlayer.currentMana).toBe(0);
-  // });
+  test('Start with player1', () => {
+    game.start();
 
-  // test('Change player after turn', () => {
-  //   const { currentPlayer } = game;
-  //   expect(currentPlayer).toBe(player1);
-  //   game.start();
-  //   expect(currentPlayer).toBe(player1);
-  //   game.endTurn();
-  //   expect(currentPlayer).toStrictEqual(player2);
-  // });
+    expect(game.currentPlayer).toBe(player1);
+  });
 
-  // test('', () => {
-  //   const game = new Game(player1, player2);
-  //   game.start();
-  //   const { currentPlayer } = game;
-  //   expect(currentPlayer.currentMana).toBe(0);
-  //   game.beginTurn();
-  //   expect(currentPlayer).toBe(player1);
-  //   expect(currentPlayer.currentMana).toBe(1);
-  //   // const card = player1.selectNextCard(2);
-  //   player1.nextCardStrategy = function*()
-  //   game.playCards();
-  //   game.endTurn();
-  //   expect(currentPlayer.health).toBe(30 - card);
-  // });
+  test('Change player after first card phase', () => {
+    game.start();
+    game.nextPhase();
+    // Skip card casting
+    game.nextPhase();
+
+    expect(game.currentPlayer).toBe(player2);
+  });
+
+  test('Decrease mana after play', () => {
+    game.start();
+    game.nextPhase();
+
+    expect(game.currentPlayer.currentMana).toBe(1);
+
+    new CastCardAction(player1, 2).run();
+
+    expect(game.currentPlayer.currentMana).toBe(0);
+  });
 });

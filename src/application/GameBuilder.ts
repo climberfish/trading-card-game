@@ -28,8 +28,20 @@ export default class GameBuilder {
     if (!this.players) throw new Error('Faltando os players');
 
     const game = new Game(...this.players);
+    this.connectPipelines();
     game.setInitPipeline(this.initPipeline);
     game.setLoop(this.runLoop);
     return game;
+  }
+
+  private connectPipelines() {
+    let pipeline = this.initPipeline;
+    for (let k = 0; k < pipeline.length; k++) {
+      pipeline[k].nextPhase = pipeline[k + 1];
+    }
+    pipeline = this.runLoop;
+    for (let k = 0; k < pipeline.length; k++) {
+      pipeline[k].nextPhase = pipeline[k + 1];
+    }
   }
 }

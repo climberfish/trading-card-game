@@ -14,17 +14,19 @@ export default class Game {
 
   private activePhase?: Phase;
 
-  private activePhaseIndex = 0;
-
   constructor(player1: Player, player2: Player) {
     this._player1 = player1;
     this._player2 = player2;
     this._currentPlayer = this._player1;
   }
 
-  get currentPlayer() { return this._currentPlayer; }
+  get currentPlayer() {
+    return this._currentPlayer;
+  }
 
-  get players(): [Player, Player] { return [this._player1, this._player2]; }
+  get players(): [Player, Player] {
+    return [this._player1, this._player2];
+  }
 
   setInitPipeline(initPhases: Phase[]): void {
     this.initPipeline = initPhases;
@@ -35,10 +37,6 @@ export default class Game {
   }
 
   start(): void {
-    // this._player1.shuffleDeck();
-    // this._player1.draw(3);
-    // this._player2.shuffleDeck();
-    // this._player2.draw(3);
     this.initPipeline.forEach((phase) => phase.run(this));
     [this.activePhase] = this.runLoop;
   }
@@ -47,10 +45,14 @@ export default class Game {
     if (!this.activePhase) return;
 
     this.activePhase.run(this);
-    this.activePhase = this.runLoop[++this.activePhaseIndex];
+    this.activePhase = this.activePhase.nextPhase;
   }
 
-  otherPlayer() {
+  switchPlayer() {
+    this._currentPlayer = this.otherPlayer();
+  }
+
+  private otherPlayer() {
     return this.currentPlayer === this._player1 ? this._player2 : this._player1;
   }
 
