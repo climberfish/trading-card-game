@@ -1,3 +1,5 @@
+import Card from '@/application/Card';
+
 export default class Mana {
   private _max = 0;
 
@@ -15,9 +17,9 @@ export default class Mana {
     this._current = this._max;
   }
 
-  consume(value: number): boolean {
-    const canConsume = (this._current >= value);
-    if (canConsume) this._current -= value;
+  consume({ cost }: Card): boolean {
+    const canConsume = (this._current >= cost);
+    if (canConsume) this._current -= cost;
     return canConsume;
   }
 }

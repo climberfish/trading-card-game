@@ -1,4 +1,5 @@
-import { Card } from '../Deck/Deck';
+import Card from '@/application/Card';
+import Game, { GameAction } from '@/application/Game';
 import Player from '../Player';
 
 export default class CastCardAction {
@@ -11,7 +12,8 @@ export default class CastCardAction {
     this.card = card;
   }
 
-  run(): void {
+  run(game: Game): void {
     this.player.selectNextCard(this.card);
+    game.emit(GameAction.CAST_CARD, { card: this.card });
   }
 }

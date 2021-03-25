@@ -1,4 +1,5 @@
-import Game from '@/application/Game';
+import DealDamageAction from '@/application/Actions/DealDamageAction';
+import Game, { ActionObserver, GameAction } from '@/application/Game';
 import Phase from '@/application/Phases/Phase';
 import Player from '@/application/Player';
 
@@ -27,19 +28,25 @@ export default class GameBuilder {
   build(): Game {
     if (!this.players) throw new Error('Faltando os players');
 
-    const game = new Game(...this.players);
+    const game = new Game(this.players[0], this.players[1], this.initialObservers());
     this.connectPipelines();
     game.setInitPipeline(this.initPipeline);
     game.setLoop(this.runLoop);
     return game;
   }
 
+  private initialObservers(): ActionObserver[] {
+    return [
+      (actionType, game, params) => {
+        if (actionType !== GameAction.CAST_CARD) return;
+        const { card } = params;
+        new DealDamageAction(card.attack, game.otherPlayer()).run();
+      },
+    ];
+  }
+
   private connectPipelines() {
-    let pipeline = this.initPipeline;
-    for (let k = 0; k < pipeline.length; k++) {
-      pipeline[k].nextPhase = pipeline[k + 1];
-    }
-    pipeline = this.runLoop;
+    const pipeline = this.runLoop;
     for (let k = 0; k < pipeline.length; k++) {
       pipeline[k].nextPhase = pipeline[k + 1];
     }

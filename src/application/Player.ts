@@ -1,4 +1,5 @@
-import { Card, Deck } from '@/application/Deck/Deck';
+import Card from '@/application/Card';
+import { Deck } from '@/application/Deck/Deck';
 import { DeckBuilder, DefaultDeckBuilder } from '@/application/Deck/DeckBuilder';
 import Mana from '@/application/Mana';
 
@@ -29,6 +30,8 @@ export default class Player {
 
   get hand(): Card[] { return this._hand; }
 
+  get isDead(): boolean { return this._health <= 0; }
+
   draw(cards: number): void {
     const cardsDrawn = this._deck.splice(0, cards);
     this._hand.push(...cardsDrawn);
@@ -43,9 +46,11 @@ export default class Player {
 
   refillMana(): void { this._mana.refill(); }
 
-  selectNextCard(index: number): Card {
-    const [card] = this._hand.splice(index, 1);
-    this._mana.consume(card);
+  dealDamage(damage: number): void { this._health -= damage; }
+
+  selectNextCard(card: Card): Card {
+    const index = this._hand.indexOf(card);
+    if (this._mana.consume(card)) this._hand.splice(index, 1);
     return card;
   }
 }
